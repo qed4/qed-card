@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Ed — Q</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0c0c0a;
+    --card: #141412;
+    --border: #252520;
+    --ink: #edeade;
+    --muted: #7a7868;
+    --accent: #c8943a;
+    --accent-dim: #2a1f0a;
+  }
+
+  html, body {
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #2a2a22 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    width: min(340px, 92vw);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2.4rem 2rem 2rem;
+    animation: appear 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes appear {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .initial { font-style: italic; color: var(--accent); }
+
+  .handle {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin-bottom: 1.6rem;
+  }
+
+  .actions { display: flex; flex-direction: column; gap: 8px; }
+
+  .action {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .action::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-dim);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .action:hover { border-color: var(--accent); color: var(--accent); }
+  .action:hover::after { opacity: 1; }
+  .action:active { transform: scale(0.98); }
+
+  .action-icon { font-size: 14px; flex-shrink: 0; position: relative; z-index: 1; }
+
+  .action-text { position: relative; z-index: 1; flex: 1; }
+
+  .action-sub {
+    display: block;
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.08em;
+    transition: color 0.15s;
+  }
+
+  .action:hover .action-sub { color: var(--accent); opacity: 0.7; }
+
+  .action-arrow {
+    position: relative;
+    z-index: 1;
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform 0.15s, color 0.15s;
+  }
+
+  .action:hover .action-arrow { transform: translateX(3px); color: var(--accent); }
+
+  .footer {
+    margin-top: 1.6rem;
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--border);
+  }
+
+  @media (hover: none) {
+    .action:active { border-color: var(--accent); background: var(--accent-dim); }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="name"><span class="initial">Q</span> Ed</div>
+  <div class="handle">quiltedison</div>
+
+  <hr class="divider">
+
+  <div class="actions">
+
+    <a class="action" href="mailto:quiltedison@gmail.com">
+      <span class="action-icon">✉</span>
+      <span class="action-text">
+        Email me
+        <span class="action-sub">quiltedison@gmail.com</span>
+      </span>
+      <span class="action-arrow">→</span>
+    </a>
+
+    <a class="action" href="https://wa.me/16073011477">
+      <span class="action-icon">◎</span>
+      <span class="action-text">
+        WhatsApp
+        <span class="action-sub">+1 607 301 1477</span>
+      </span>
+      <span class="action-arrow">→</span>
+    </a>
+
+    <a class="action" href="tel:+16073011477">
+      <span class="action-icon">◻</span>
+      <span class="action-text">
+        Call me
+        <span class="action-sub">+1 607 301 1477</span>
+      </span>
+      <span class="action-arrow">→</span>
+    </a>
+
+  </div>
+
+  <div class="footer">The Commons · 2025</div>
+</div>
+</body>
+</html>
