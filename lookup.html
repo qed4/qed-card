@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Your Access — Q Ed</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0c0c0a; --card: #141412; --border: #252520;
+    --ink: #edeade; --muted: #7a7868; --accent: #c8943a; --accent-dim: #2a1f0a;
+    --green: #3aaf6b; --green-dim: #0a1a10; --red: #ff5555; --red-dim: #1a0a0a;
+  }
+  html, body {
+    min-height: 100vh; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: radial-gradient(circle, #2a2a22 1px, transparent 1px);
+    background-size: 28px 28px; opacity: 0.5; pointer-events: none;
+  }
+  .card {
+    position: relative; z-index: 1; width: min(340px, 92vw);
+    background: var(--card); border: 1px solid var(--border);
+    padding: 2.4rem 2rem 2rem;
+    animation: appear 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    opacity: 0; transform: translateY(20px);
+  }
+  @keyframes appear { to { opacity: 1; transform: translateY(0); } }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+  .eyebrow { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--ink); margin-bottom: 1.6rem; line-height: 1.1; }
+  .title em { font-style: italic; color: var(--accent); }
+  .divider { border: none; border-top: 1px solid var(--border); margin-bottom: 1.4rem; }
+  .label { font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; display: block; }
+  input[type=text] {
+    width: 100%; background: #0f0f0d; border: 1px solid var(--border);
+    border-bottom: 2px solid var(--border); color: var(--ink);
+    font-family: 'DM Mono', monospace; font-size: 1rem;
+    padding: 12px 14px; outline: none; transition: border-color 0.15s;
+    letter-spacing: 0.06em; margin-bottom: 10px;
+  }
+  input[type=text]:focus { border-color: var(--accent); border-bottom-color: var(--accent); }
+  input::placeholder { color: var(--muted); }
+  .lookup-btn {
+    width: 100%; background: var(--accent-dim); border: 1px solid var(--accent);
+    color: var(--accent); font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 13px; cursor: pointer; transition: all 0.15s; margin-bottom: 1.2rem;
+  }
+  .lookup-btn:hover { background: var(--accent); color: #000; }
+  .result { display: none; }
+  .result.show { display: block; }
+  .result-header {
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px; padding-bottom: 8px;
+    border-top: 1px solid var(--border); padding-top: 10px;
+  }
+  .password-display {
+    background: var(--green-dim); border: 1px solid var(--green);
+    padding: 14px 16px; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .password-text { font-size: 1.4rem; font-weight: 500; color: var(--green); letter-spacing: 0.06em; }
+  .copy-btn {
+    background: transparent; border: 1px solid var(--green);
+    color: var(--green); font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; cursor: pointer; transition: all 0.15s;
+  }
+  .copy-btn:hover { background: var(--green); color: #000; }
+  .open-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 13px 14px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--ink); font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.15s; text-decoration: none;
+  }
+  .open-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .not-found {
+    background: var(--red-dim); border: 1px solid var(--red);
+    padding: 12px 14px; font-size: 11px; color: var(--red);
+    letter-spacing: 0.06em; line-height: 1.6; display: none;
+  }
+  .not-found.show { display: block; }
+  .expires { margin-top: 1rem; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--border); text-align: center; }
+  .expires span { color: var(--muted); }
+  .back-btn {
+    background: transparent; border: none; color: var(--muted);
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; cursor: pointer; margin-top: 12px;
+    text-transform: uppercase; display: block; width: 100%; text-align: center;
+    transition: color 0.15s;
+  }
+  .back-btn:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="eyebrow">Q Ed · The Commons</div>
+  <div class="title">Your <em>access</em></div>
+  <hr class="divider">
+
+  <!-- Lookup form -->
+  <div id="form-area">
+    <label class="label" for="name-input">Enter your name</label>
+    <input type="text" id="name-input" placeholder="e.g. jane" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+      onkeydown="if(event.key==='Enter') lookup()">
+    <button class="lookup-btn" onclick="lookup()">Find my password →</button>
+    <div class="not-found" id="not-found">
+      Name not recognised.<br>Contact Ed to be added.
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result" id="result">
+    <div class="result-header" id="result-greeting"></div>
+    <div class="password-display">
+      <div class="password-text" id="pw-text"></div>
+      <button class="copy-btn" onclick="copy()">Copy</button>
+    </div>
+    <a class="open-btn" id="open-link" href="#" target="_blank">
+      <span>Open your page →</span>
+      <span>↗</span>
+    </a>
+    <div class="expires" id="expires"></div>
+    <button class="back-btn" onclick="reset()">← look up a different name</button>
+  </div>
+
+</div>
+
+<script>
+  let clientData = {};
+
+  async function loadData() {
+    try {
+      const res = await fetch('/passwords.json');
+      const data = await res.json();
+      clientData = data.clients || {};
+    } catch(e) {
+      console.error('Could not load passwords.json');
+    }
+  }
+
+  function lookup() {
+    const name = document.getElementById('name-input').value.trim().toLowerCase();
+    const notFound = document.getElementById('not-found');
+    notFound.classList.remove('show');
+
+    if (!name) return;
+
+    const client = clientData[name];
+
+    if (!client) {
+      notFound.classList.add('show');
+      return;
+    }
+
+    document.getElementById('result-greeting').textContent =
+      `Found — here's your access, ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+    document.getElementById('pw-text').textContent = client.password;
+    document.getElementById('open-link').href = client.url;
+
+    if (client.expires) {
+      const d = new Date(client.expires);
+      const days = Math.ceil((d - new Date()) / 86400000);
+      document.getElementById('expires').innerHTML =
+        days > 0
+          ? `Page expires in <span>${days} day${days !== 1 ? 's' : ''}</span>`
+          : `<span style="color:#ff5555">This page has expired — contact Ed</span>`;
+    }
+
+    document.getElementById('form-area').style.display = 'none';
+    document.getElementById('result').classList.add('show');
+  }
+
+  function copy() {
+    const pw = document.getElementById('pw-text').textContent;
+    navigator.clipboard.writeText(pw).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  function reset() {
+    document.getElementById('form-area').style.display = 'block';
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('not-found').classList.remove('show');
+    document.getElementById('name-input').value = '';
+    document.getElementById('name-input').focus();
+  }
+
+  loadData();
+</script>
+</body>
+</html>
